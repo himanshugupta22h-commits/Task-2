@@ -1,0 +1,64 @@
+# CipherVault — Sign In Page
+
+A static sign-in page UI for CipherVault, a password vault and secure notes app. Built with plain HTML, CSS, and JavaScript — no frameworks, no build step.
+
+## Files
+
+```
+ciphervault/
+├── index.html   Page structure and content
+├── style.css    Layout, color tokens, and responsive rules
+├── script.js    Interactivity (password toggle, demo fill, form submit)
+└── README.md    This file
+```
+
+## Running it
+
+No build tools required. Either:
+
+- Open `index.html` directly in a browser, or
+- Serve the folder locally, e.g.:
+  ```
+  npx serve .
+  ```
+  or
+  ```
+  python3 -m http.server
+  ```
+
+All three files must stay in the same folder — `index.html` links to `style.css` and `script.js` by relative path.
+
+## Features
+
+- **Split layout** — dark hero panel on the left with the CipherVault brand and tagline, sign-in form on the right.
+- **Password visibility toggle** — click the eye icon to show/hide the password field.
+- **Use demo** — fills the email and password fields with demo credentials for quick testing.
+- **Remember me** — custom-styled checkbox.
+- **Form validation** — uses native HTML5 required/email validation before submit.
+- **Simulated sign-in** — submitting the form shows a brief "Signing in…" loading state, then confirms via an alert (no real backend is connected).
+- **Responsive** — stacks into a single column below ~860px width.
+
+## Wiring up a real backend
+
+This is a front-end shell only. To connect it to an actual authentication API:
+
+1. In `script.js`, replace the `setTimeout` block inside the form's `submit` handler with a real request, e.g.:
+   ```js
+   const res = await fetch('/api/auth/sign-in', {
+     method: 'POST',
+     headers: { 'Content-Type': 'application/json' },
+     body: JSON.stringify({
+       email: emailInput.value,
+       password: passwordInput.value,
+       remember: document.getElementById('remember').checked
+     })
+   });
+   ```
+2. Handle success (e.g. store the returned JWT, redirect to the vault) and failure (show an inline error) states instead of the `alert(...)` placeholder.
+3. Update the "Create one" link to point to your actual registration route.
+
+## Customizing
+
+- **Colors** — all colors are defined as CSS custom properties at the top of `style.css` (`:root { ... }`). Change `--blue-600` / `--blue-glow` to re-theme the accent color.
+- **Copy** — headline, tagline, and labels live directly in `index.html`.
+- **Icons** — inline SVGs in `index.html` and `script.js` (for the eye icon toggle); swap them for an icon library if preferred.
